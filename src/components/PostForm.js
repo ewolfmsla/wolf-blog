@@ -25,7 +25,11 @@ const PostForm = ({post: propsPost, addNewPost, updatePost}) => {
 
   useEffect(() => {
     if (prevPost && quillRef.current) {
+<<<<<<< HEAD
       if (prevPost.id !== propsPost.id) {
+=======
+      if (prevPost.key !== propsPost.key) {
+>>>>>>> wolf-blog first push
         setPost({...propsPost})
         console.log({post})
         getQuillEditor().setText("")
