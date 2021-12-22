@@ -6,8 +6,6 @@ const Login = () => {
   const [username, setUsername] = useState("")
   const [password, setPassword] = useState("")
 
-  console.log('Login component render')
-
   const handleLogin = (event) => {
     event.preventDefault()
     onLogin(username, password)

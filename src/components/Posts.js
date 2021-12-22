@@ -13,7 +13,7 @@ const Posts = ({posts, deletePost}) => {
           <li>No posts yet!</li>
         )}
         {posts.sort((a, b) =>
-          (a.title < b.title) ? -1 : (a.title > b.title) ? 1 : 0
+          (a.createdOn < b.createdOn) ? 1 : (a.createdOn > b.createdOn) ? -1 : 0
         ).map(post =>
           <li key={post.key}>
             <h2>

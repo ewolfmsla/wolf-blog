@@ -6,7 +6,6 @@ import propTypes from "prop-types";
 import {Redirect, useHistory} from "react-router-dom";
 
 const PostForm = ({post: propsPost, addNewPost, updatePost}) => {
-  console.log("PostForm Rendering...")
   const [post, setPost] = useState({...propsPost})
   const [saved, setSaved] = useState(false)
   const history = useHistory()
@@ -27,7 +26,6 @@ const PostForm = ({post: propsPost, addNewPost, updatePost}) => {
     if (prevPost && quillRef.current) {
       if (prevPost.key !== propsPost.key) {
         setPost({...propsPost})
-        console.log({post})
         getQuillEditor().setText("")
       }
     }
@@ -39,7 +37,6 @@ const PostForm = ({post: propsPost, addNewPost, updatePost}) => {
   }
 
   const handlePostForm = (event) => {
-    console.log("handlePostForm called...")
     event.preventDefault()
     if (post.title) {
       if (updatePost) {

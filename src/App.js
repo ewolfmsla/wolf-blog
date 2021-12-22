@@ -24,9 +24,9 @@ const App = () => {
         const posts = snapshot.val()
         const newStatePosts = []
         for (let post in posts) {
-          console.log('post: ', post)
           newStatePosts.push({
             key: post,
+            createdOn: posts[post].createdOn,
             slug: posts[post].slug,
             title: posts[post].title,
             content: posts[post].content
@@ -46,8 +46,8 @@ const App = () => {
     if (email && password) {
       firebase.auth()
         .signInWithEmailAndPassword(email, password)
-        .then((res) => setUser({email: res.user.email, isAuthenticated: true}))
-        .catch(err => console.log(`error: ${err.message}`))
+        .then((res) => setUser({email: res.email, isAuthenticated: true}))
+        .catch((err) => displayMessage('loginError'))
     }
   }
 
@@ -73,18 +73,17 @@ const App = () => {
   }
 
   const updatePost = (post) => {
-    console.log("updatePost start...")
     const postRef = firebase.database().ref("posts/" + post.key)
     postRef.update({
       slug: getSlugFromTitle(post.title),
       title: post.title, content: post.content
     }).then(() => displayMessage('updated')).catch(error => console.log({error}))
-    console.log("updatePost end...")
   }
 
   const addNewPost = (post) => {
     const postRef = firebase.database().ref("posts")
     post.slug = getSlugFromTitle(post.title)
+    post.createdOn = Date.now()
     delete post.key
     postRef.push(post)
     displayMessage("saved")
@@ -114,7 +113,6 @@ const App = () => {
                    }}/>
             <Route path={"/edit/:slug"}
                    render={(props) => {
-                     console.log("/edit/:slug")
                      const post = posts.find(post => post.slug === props.match.params.slug)
                      if (user.isAuthenticated && post) {
                        return <PostForm post={post} updatePost={updatePost}/>
