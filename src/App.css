@@ -37,30 +37,6 @@
     text-decoration: none;
 }
 
-.App-header .food {
-    color: red;
-    font-family: Verdana;
-    font-size: 18px;
-    display: inline;
-    padding-right: .5rem;
-}
-
-.App-header .truck {
-    color: yellow;
-    font-family: Verdana;
-    font-size: 18px;
-    display: inline;
-    padding-right: .5rem;
-}
-
-.App-header .other {
-    color: green;
-    font-family: Verdana;
-    font-size: 18px;
-    display: inline;
-    padding-right: .5rem;
-}
-
 .App-header ul {
     padding: 1px;
 }
@@ -113,6 +89,10 @@
 }
 
 .App-message.deleted {
+    background: #FF3F69;
+}
+
+.App-message.loginError {
     background: #FF3F69;
 }
 
