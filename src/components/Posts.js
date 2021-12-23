@@ -2,12 +2,13 @@ import React, {useContext} from "react";
 import {Link} from "react-router-dom";
 import propTypes from "prop-types";
 import UserContext from "../context/UserContext";
+import {FaBlog, FaEdit, FaTrash} from "react-icons/all";
 
 const Posts = ({posts, deletePost}) => {
   const {user} = useContext(UserContext)
   return (
     <article className="container">
-      <h1>Posts</h1>
+      <h1><FaBlog size={20}/>{' '}Posts</h1>
       <ul>
         {posts.length < 1 && (
           <li>No posts yet!</li>
@@ -23,8 +24,8 @@ const Posts = ({posts, deletePost}) => {
             </h2>
             {user.isAuthenticated && (
               <p>
-                <Link to={`/edit/${post.slug}`}>Edit</Link>{' | '}
-                <button className="linkLike" type="submit" onClick={() => deletePost(post)}>Delete</button>
+                <Link to={`/edit/${post.slug}`}><FaEdit/></Link>{' | '}
+                <button className="linkLike" type="submit" onClick={() => deletePost(post)}><FaTrash/></button>
               </p>
             )}
           </li>
