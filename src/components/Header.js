@@ -1,33 +1,61 @@
-import React, {useContext} from "react";
-import {Link} from "react-router-dom";
-import UserContext from "../context/UserContext";
 
-const Header = () => {
-  const {user, onLogout} = useContext(UserContext)
+import propTypes from "prop-types";
+import { useState } from "react";
+import { Button } from "react-bootstrap";
+import { FaUser } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { logout } from "../firebase"
+import LoginModal from "./LoginModal";
+import Logo from "./Logo";
 
-  return <header className="App-header">
-    <ul className="container">
-      <li>
-        <Link to={'/'}>Wolf Blog</Link>
-      </li>
-      {user.isAuthenticated ? (
-        <>
+const Header = ({ displayMessage, user }) => {
+
+  const [show, setShow] = useState(false)
+
+  const onLogin = (event) => {
+    event.preventDefault()
+    setShow(true)
+  }
+
+  const onLogout = (event) => {
+    event.preventDefault()
+    logout()
+      .then(() => displayMessage("logout"))
+  }
+
+  return (
+    <>
+      {show && <LoginModal show={show} setShow={setShow} />}
+      <header className="App-header">
+        <ul className="container">
           <li>
-            <Link to={'/new'}>Add Post</Link>
+            <Link to={'/'}><Logo /></Link>
           </li>
-          <li>
-            <button className={'logout'} onClick={(event) => {
-              event.preventDefault()
-              onLogout()
-            }}>Logout
-            </button>
-          </li>
-        </>
-      ) : (<li>
-        <Link to={"/login"}>Login</Link>
-      </li>)}
-    </ul>
-  </header>
+          {user?.isAuthenticated ? (
+            <>
+              {user?.isAdmin && <li>
+                <Link to={'/new'}>Add Post</Link>
+              </li>}
+              <li>
+                <Button onClick={onLogout} className={'logoutButton'}>Logout</Button>
+                <FaUser size={20}
+                  style={{ margin: '.5rem', float: 'right', color: '#ffff00' }}
+                  title={user?.email} />
+              </li>
+            </>
+          ) : (<li>
+            <Button className={"loginButton"} onClick={onLogin}>Login</Button>
+          </li>)}
+        </ul>
+      </header>
+    </>
+  )
+
+}
+
+Header.propTypes = {
+  displayMessage: propTypes.func.isRequired,
+  user: propTypes.object.isRequired
 }
 
 export default Header
