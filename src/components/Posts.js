@@ -1,44 +1,87 @@
-import React, {useContext} from "react";
-import {Link} from "react-router-dom";
+import React, { useState } from "react";
+import { Link } from "react-router-dom";
 import propTypes from "prop-types";
-import UserContext from "../context/UserContext";
-import {FaBlog, FaEdit, FaTrash} from "react-icons/all";
+import { FaEdit, FaTrash, FaArrowRight } from "react-icons/all";
+import { css } from "@emotion/react";
+import ConfirmModal from "./ConfirmModal";
+import { FadeLoader } from "react-spinners";
+import PostedOn from "./PostedOn";
 
-const Posts = ({posts, deletePost}) => {
-  const {user} = useContext(UserContext)
+const Posts = ({ posts, deletePost, loading, user }) => {
+  const [deleteClicked, setDeleteClicked] = useState(false)
+  const [targetPost, setTargetPost] = useState()
+
+  const onDeletePostClicked = (post) => {
+    setTargetPost(post)
+    setDeleteClicked(true)
+  }
+
+  const onDelete = (postKey) => {
+    setDeleteClicked(false)
+    deletePost(postKey)
+  }
+
+  const onCancel = () => {
+    setDeleteClicked(false)
+  }
+
+  const deleteText = (targetPost) => {
+    return `Are you sure you would like to delete <em><b>${targetPost.title}</b></em>?`
+  }
+
   return (
     <article className="container">
-      <h1><FaBlog size={20}/>{' '}Posts</h1>
-      <ul>
-        {posts.length < 1 && (
-          <li>No posts yet!</li>
+      {deleteClicked && <ConfirmModal
+        id={targetPost.key}
+        text={deleteText(targetPost)}
+        onCancel={onCancel}
+        onContinue={onDelete}
+        title={"Delete Post"} />}
+
+      {/* <h1>Posts{' '}<FaBlog size={20} /></h1> */}
+      <div>
+        {loading && (
+          <FadeLoader loading={loading} css={override} height={15} radius={2} width={5} margin={2} />
         )}
         {posts.sort((a, b) =>
           (a.createdOn < b.createdOn) ? 1 : (a.createdOn > b.createdOn) ? -1 : 0
         ).map(post =>
-          <li key={post.key}>
-            <h2>
-              <Link to={`/post/${post.slug}`}>
+          <div key={post.key} className={'post'}>
+            <div >
+              <Link to={`/post/${post?.key}`} className={'postTitle'}>
                 {post.title}
               </Link>
-            </h2>
-            {user.isAuthenticated && (
-              <p>
-                <Link to={`/edit/${post.slug}`}><FaEdit/></Link>{' | '}
-                <button className="linkLike" type="submit" onClick={() => deletePost(post)}><FaTrash/></button>
-              </p>
-            )}
-          </li>
+              <div><PostedOn post={post} /></div>
+              <div dangerouslySetInnerHTML={{ __html: post?.content }} className={'postBody'} />
+              {user?.isAdmin && (
+                <p>
+                  <Link to={`/edit/${post?.key}`}><FaEdit /></Link>{' | '}
+                  <button className="linkLike" type="submit" onClick={() => onDeletePostClicked(post)}><FaTrash /></button>
+                </p>
+              )}
+            </div>
+            <div><img alt={'spacer'} src={"/images/spacer.gif"} />
+              <Link to={`/post/${post?.key}`} style={{ float: 'right' }}>Full No Outlet <FaArrowRight /> Blog post </Link>
+            </div>
+            <hr />
+          </div>
         )}
-      </ul>
+      </div>
     </article>)
 }
 
 
 Posts.propTypes = {
   deletePost: propTypes.func.isRequired,
-  posts: propTypes.array
+  posts: propTypes.array.isRequired,
+  loading: propTypes.bool.isRequired,
+  user: propTypes.object.isRequired
 }
+
+const override = css`
+  display: block;
+  margin: 0 auto;
+`;
 
 export default Posts
 
