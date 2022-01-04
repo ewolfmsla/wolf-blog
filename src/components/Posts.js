@@ -52,7 +52,7 @@ const Posts = ({ posts, deletePost, loading, user }) => {
                 {post.title}
               </Link>
               <div><PostedOn post={post} /></div>
-              <div dangerouslySetInnerHTML={{ __html: post?.content }} className={'postBody'} />
+              <div dangerouslySetInnerHTML={{ __html: post?.truncated }} className={'postBody'} />
               {user?.isAdmin && (
                 <p>
                   <Link to={`/edit/${post?.key}`}><FaEdit /></Link>{' | '}

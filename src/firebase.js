@@ -1,7 +1,7 @@
 import { initializeApp } from "firebase/app"
 import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth"
 import { getFirestore } from 'firebase/firestore';
-import { child, get, getDatabase, ref, remove, set } from 'firebase/database'
+import { child, get, getDatabase, ref, remove, set, onValue } from 'firebase/database'
 import { v4 as uuidV4 } from 'uuid';
 import { postSnapshotToPost, postsSnapshotToArray } from "./utils/snapshot";
 import { useEffect, useState } from "react";
@@ -16,7 +16,6 @@ const {
   REACT_APP_APP_ID,
   REACT_APP_MEASUREMENT_ID,
   REACT_APP_ADMINS
-
 } = process.env
 
 const config = {
@@ -61,21 +60,21 @@ const useAuth = () => {
   return user
 }
 
+const fetchAndSetPosts = (setPosts) => {
+  onValue(ref(database, 'posts'), (snapshot) => {
+    const latestPosts = postsSnapshotToArray(snapshot)
+    setPosts(latestPosts)
+  }, {
+    onlyOnce: true
+  });
+}
+
 const login = (username, password) => {
   return signInWithEmailAndPassword(auth, username, password)
 }
 
 const logout = () => {
   return signOut(auth)
-}
-
-const fetchPosts = () => {
-  const fetch = async () => {
-    const dbRef = ref(database);
-    const postsSnapshot = await get(child(dbRef, "posts"))
-    return postsSnapshotToArray(postsSnapshot)
-  }
-  return fetch()
 }
 
 const fetchPost = (key) => {
@@ -107,7 +106,7 @@ const removePost = (key) => {
   return remove(dbRef)
 }
 
-export { database, auth, app, db, fetchPost, fetchPosts, addPost, savePost, login, logout, removePost, useAuth }
+export { database, auth, app, db, fetchPost, addPost, savePost, login, logout, removePost, useAuth, fetchAndSetPosts }
 
 
 
