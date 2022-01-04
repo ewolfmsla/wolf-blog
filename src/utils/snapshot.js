@@ -16,7 +16,8 @@ export const postsSnapshotToArray = (snapshot) => {
       key: post,
       createdOn: snapshotVal[post].createdOn,
       title: snapshotVal[post].title,
-      content: truncatedContent(snapshotVal[post].content)
+      content: snapshotVal[post].content,
+      truncated: truncatedContent(snapshotVal[post].content)
     })
   }
   return newStatePosts

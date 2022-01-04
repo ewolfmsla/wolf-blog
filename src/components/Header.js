@@ -2,7 +2,7 @@
 import propTypes from "prop-types";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
-import { FaUser } from "react-icons/fa";
+import { FaPlus } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { logout } from "../firebase"
 import LoginModal from "./LoginModal";
@@ -34,13 +34,13 @@ const Header = ({ displayMessage, user }) => {
           {user?.isAuthenticated ? (
             <>
               {user?.isAdmin && <li>
-                <Link to={'/new'}>Add Post</Link>
+                <Link to={'/new'}><FaPlus /></Link>
               </li>}
               <li>
                 <Button onClick={onLogout} className={'logoutButton'}>Logout</Button>
-                <FaUser size={20}
+                {/* <FaUser size={20}
                   style={{ margin: '.5rem', float: 'right', color: '#ffff00' }}
-                  title={user?.email} />
+                  title={user?.email} /> */}
               </li>
             </>
           ) : (<li>
