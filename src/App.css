@@ -56,10 +56,28 @@
 
 .logo {
     font-size: x-large;
-    font-weight: lighter;
-    color: #ffff00;
+    font-weight: bolder;
+    color: #000000;
+    background-color: yellow;
     border: 1px solid #ffff00;
-    padding: .25rem
+    padding: .25rem;
+    border-radius: 1px;
+}
+
+.logoBorder {
+    border-style: solid;
+    border-color: #000000;
+    padding-top: .70rem;
+    padding-bottom: .4rem;
+    border-radius: 5px;
+}
+
+.logoBorderOuter {
+   border-style: solid;
+    border-color: #ffff00;
+    padding-top: .9rem;
+    padding-bottom: .55rem;
+    border-radius: 5px;
 }
 
 .date {
