@@ -35,15 +35,15 @@ const Post = ({ postKey, posts, visitor, setVisitor }) => {
     <article className={"container"}>
       {loading ? (<FadeLoader loading={loading} css={override} height={15} radius={2} width={5} margin={2} />
       ) : post?.key ? (
-        <>
-          <h3 className={'heading date'}>
+        <div className={'post'}>
+          <div className={'postTitle'}>
             <div>{post.title}</div>
-            <div><PostedOn post={post} /></div>
-          </h3>
-          <div className={"content"} dangerouslySetInnerHTML={{ __html: post.content }} />
+            <PostedOn post={post} />
+          </div>
+          <div className={"postBody"} dangerouslySetInnerHTML={{ __html: post.content }} />
           {/* <hr className={"solid"} /> */}
           {/* <Comments post={post} visitor={visitor} setVisitor={setVisitor} /> */}
-        </>
+        </div>
       ) : <NotFound />}
     </article>
   )
