@@ -1,13 +1,7 @@
 import React from "react"
-import { FaArrowRight } from "react-icons/fa"
 
 const Logo = () => {
-  return <span className={'logoBorderOuter'}>
-    <span className={'logoBorder'}>
-      <span className={'logo'}>No Outlet <FaArrowRight color={'#000000'} size={25} />
-      </span>
-    </span>
-  </span>
+  return <img src="/images/no-outlet-2.png" alt={'No Outlet'} width={150} />
 }
 
 export default Logo
