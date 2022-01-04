@@ -49,10 +49,10 @@ const Posts = ({ posts, deletePost, loading, user }) => {
           <div key={post.key} className={'post'}>
             <div >
               <Link to={`/post/${post?.key}`} className={'postTitle'}>
-                {post.title}
+                <div>{post.title}</div>
               </Link>
-              <div><PostedOn post={post} /></div>
-              <div dangerouslySetInnerHTML={{ __html: post?.content }} className={'postBody'} />
+              <PostedOn post={post} />
+              <div dangerouslySetInnerHTML={{ __html: post?.truncated }} className={'postBody'} />
               {user?.isAdmin && (
                 <p>
                   <Link to={`/edit/${post?.key}`}><FaEdit /></Link>{' | '}

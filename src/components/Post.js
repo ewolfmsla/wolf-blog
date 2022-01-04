@@ -8,40 +8,42 @@ import { css } from "@emotion/react";
 import FadeLoader from "react-spinners/FadeLoader";
 import PostedOn from "./PostedOn";
 
-const Post = ({ postKey, visitor, setVisitor }) => {
+const Post = ({ postKey, posts, visitor, setVisitor }) => {
   const [post, setPost] = useState({ title: "", content: "" })
   let [loading, setLoading] = useState(true);
   const hasFetchedData = useRef(false);
 
-  function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
   useEffect(() => {
     if (!hasFetchedData.current) {
-      fetchPost(postKey).then((post) => {
-        sleep(5).then(() => {
+      const currentPost = posts.filter(post => post?.key === postKey)
+
+      if (currentPost.length > 0) {
+        setPost(currentPost[0])
+        setLoading(false)
+      } else {
+        fetchPost(postKey).then((post) => {
           setPost(post)
           setLoading(false)
         })
-      })
-      hasFetchedData.current = false
+      }
+
+      hasFetchedData.current = true
     }
-  }, [postKey])
+  }, [posts, postKey])
 
   return (
     <article className={"container"}>
       {loading ? (<FadeLoader loading={loading} css={override} height={15} radius={2} width={5} margin={2} />
       ) : post?.key ? (
-        <>
-          <h3 className={'heading date'}>
+        <div className={'post'}>
+          <div className={'postTitle'}>
             <div>{post.title}</div>
-            <div><PostedOn post={post} /></div>
-          </h3>
-          <div className={"content"} dangerouslySetInnerHTML={{ __html: post.content }} />
+            <PostedOn post={post} />
+          </div>
+          <div className={"postBody"} dangerouslySetInnerHTML={{ __html: post.content }} />
           {/* <hr className={"solid"} /> */}
           {/* <Comments post={post} visitor={visitor} setVisitor={setVisitor} /> */}
-        </>
+        </div>
       ) : <NotFound />}
     </article>
   )
@@ -49,6 +51,7 @@ const Post = ({ postKey, visitor, setVisitor }) => {
 
 Post.propTypes = {
   postKey: propTypes.string.isRequired,
+  posts: propTypes.array.isRequired,
   setVisitor: propTypes.func.isRequired,
   visitor: propTypes.object,
 }
